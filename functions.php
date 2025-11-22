@@ -16,7 +16,8 @@ if (!defined('ABSPATH')) {
  * Theme Setup
  * Registers theme support features and menus
  */
-function express_reparatur_setup() {
+function express_reparatur_setup()
+{
     // Add theme support for various features
     add_theme_support('title-tag');
     add_theme_support('post-thumbnails');
@@ -28,16 +29,16 @@ function express_reparatur_setup() {
         'caption',
     ));
     add_theme_support('custom-logo', array(
-        'height'      => 100,
-        'width'       => 300,
+        'height' => 100,
+        'width' => 300,
         'flex-height' => true,
-        'flex-width'  => true,
+        'flex-width' => true,
     ));
-    
+
     // Register navigation menu
     register_nav_menus(array(
         'primary' => __('Primary Menu', 'express-reparatur'),
-        'footer'  => __('Footer Menu', 'express-reparatur'),
+        'footer' => __('Footer Menu', 'express-reparatur'),
     ));
 }
 add_action('after_setup_theme', 'express_reparatur_setup');
@@ -46,15 +47,16 @@ add_action('after_setup_theme', 'express_reparatur_setup');
  * Enqueue Scripts and Styles - Vanilla JS Only
  * Modern, lightweight approach without Bootstrap or jQuery
  */
-function express_reparatur_scripts() {
+function express_reparatur_scripts()
+{
     // Font Awesome for icons
     wp_enqueue_style(
-        'font-awesome', 
-        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css', 
-        array(), 
+        'font-awesome',
+        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
+        array(),
         '6.5.1'
     );
-    
+
     // Google Fonts - Inter & Plus Jakarta Sans for professional typography
     wp_enqueue_style(
         'google-fonts',
@@ -62,24 +64,24 @@ function express_reparatur_scripts() {
         array(),
         null
     );
-    
+
     // Theme stylesheet
     wp_enqueue_style(
-        'express-reparatur-style', 
-        get_stylesheet_uri(), 
-        array('font-awesome', 'google-fonts'), 
-        '1.1.0'
+        'express-reparatur-style',
+        get_stylesheet_uri(),
+        array('font-awesome', 'google-fonts'),
+        time()
     );
-    
+
     // Custom theme JS - Vanilla JavaScript only (NO jQuery, NO Bootstrap)
     wp_enqueue_script(
-        'express-reparatur-script', 
-        get_template_directory_uri() . '/assets/js/main.js', 
-        array(), 
-        '1.1.0', 
+        'express-reparatur-script',
+        get_template_directory_uri() . '/assets/js/main.js',
+        array(),
+        '1.1.0',
         true
     );
-    
+
     // Remove jQuery if not needed by other plugins
     // Uncomment the following line if you want to completely remove jQuery
     // wp_dequeue_script('jquery');
@@ -89,25 +91,26 @@ add_action('wp_enqueue_scripts', 'express_reparatur_scripts');
 /**
  * Register Widget Areas
  */
-function express_reparatur_widgets_init() {
+function express_reparatur_widgets_init()
+{
     register_sidebar(array(
-        'name'          => __('Sidebar', 'express-reparatur'),
-        'id'            => 'sidebar-1',
-        'description'   => __('Add widgets here to appear in your sidebar.', 'express-reparatur'),
+        'name' => __('Sidebar', 'express-reparatur'),
+        'id' => 'sidebar-1',
+        'description' => __('Add widgets here to appear in your sidebar.', 'express-reparatur'),
         'before_widget' => '<section id="%1$s" class="widget %2$s">',
-        'after_widget'  => '</section>',
-        'before_title'  => '<h3 class="widget-title">',
-        'after_title'   => '</h3>',
+        'after_widget' => '</section>',
+        'before_title' => '<h3 class="widget-title">',
+        'after_title' => '</h3>',
     ));
-    
+
     register_sidebar(array(
-        'name'          => __('Footer Widget Area', 'express-reparatur'),
-        'id'            => 'footer-1',
-        'description'   => __('Add widgets here to appear in your footer.', 'express-reparatur'),
+        'name' => __('Footer Widget Area', 'express-reparatur'),
+        'id' => 'footer-1',
+        'description' => __('Add widgets here to appear in your footer.', 'express-reparatur'),
         'before_widget' => '<div id="%1$s" class="footer-widget %2$s">',
-        'after_widget'  => '</div>',
-        'before_title'  => '<h3 class="widget-title">',
-        'after_title'   => '</h3>',
+        'after_widget' => '</div>',
+        'before_title' => '<h3 class="widget-title">',
+        'after_title' => '</h3>',
     ));
 }
 add_action('widgets_init', 'express_reparatur_widgets_init');
@@ -115,7 +118,8 @@ add_action('widgets_init', 'express_reparatur_widgets_init');
 /**
  * Custom Excerpt Length
  */
-function express_reparatur_excerpt_length($length) {
+function express_reparatur_excerpt_length($length)
+{
     return 30;
 }
 add_filter('excerpt_length', 'express_reparatur_excerpt_length');
@@ -123,7 +127,8 @@ add_filter('excerpt_length', 'express_reparatur_excerpt_length');
 /**
  * Add Custom Body Classes
  */
-function express_reparatur_body_classes($classes) {
+function express_reparatur_body_classes($classes)
+{
     if (!is_singular()) {
         $classes[] = 'archive-page';
     }
@@ -135,7 +140,8 @@ add_filter('body_class', 'express_reparatur_body_classes');
  * Enhanced Schema.org Markup for Local Business
  * Comprehensive structured data for better SEO and local search visibility
  */
-function express_reparatur_schema_markup() {
+function express_reparatur_schema_markup()
+{
     $schema = array(
         '@context' => 'https://schema.org',
         '@type' => 'LocalBusiness',
@@ -226,7 +232,7 @@ function express_reparatur_schema_markup() {
             'worstRating' => '1'
         )
     );
-    
+
     echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
 }
 add_action('wp_head', 'express_reparatur_schema_markup');
@@ -234,7 +240,8 @@ add_action('wp_head', 'express_reparatur_schema_markup');
 /**
  * Add Preconnect for Performance Optimization
  */
-function express_reparatur_resource_hints($urls, $relation_type) {
+function express_reparatur_resource_hints($urls, $relation_type)
+{
     if ('preconnect' === $relation_type) {
         $urls[] = array(
             'href' => 'https://fonts.googleapis.com',
@@ -252,7 +259,8 @@ add_filter('wp_resource_hints', 'express_reparatur_resource_hints', 10, 2);
 /**
  * Add Security Headers
  */
-function express_reparatur_security_headers() {
+function express_reparatur_security_headers()
+{
     header('X-Content-Type-Options: nosniff');
     header('X-Frame-Options: SAMEORIGIN');
     header('X-XSS-Protection: 1; mode=block');

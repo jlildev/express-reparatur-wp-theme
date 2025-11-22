@@ -4,7 +4,7 @@
  * 
  * @package ExpressReparatur
  * @author Jlil <https://jlil.net>
- * @version 1.0.0
+ * @version 1.1.0
  */
 
 // Prevent direct access
@@ -43,24 +43,46 @@ function express_reparatur_setup() {
 add_action('after_setup_theme', 'express_reparatur_setup');
 
 /**
- * Enqueue Scripts and Styles
- * Loads Bootstrap and custom theme assets
+ * Enqueue Scripts and Styles - Vanilla JS Only
+ * Modern, lightweight approach without Bootstrap or jQuery
  */
 function express_reparatur_scripts() {
-    // Bootstrap CSS
-    wp_enqueue_style('bootstrap', get_template_directory_uri() . '/assets/css/bootstrap.min.css', array(), '5.3.0');
-    
     // Font Awesome for icons
-    wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css', array(), '6.4.0');
+    wp_enqueue_style(
+        'font-awesome', 
+        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css', 
+        array(), 
+        '6.5.1'
+    );
+    
+    // Google Fonts - Inter & Plus Jakarta Sans for professional typography
+    wp_enqueue_style(
+        'google-fonts',
+        'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap',
+        array(),
+        null
+    );
     
     // Theme stylesheet
-    wp_enqueue_style('express-reparatur-style', get_stylesheet_uri(), array('bootstrap'), '1.0.0');
+    wp_enqueue_style(
+        'express-reparatur-style', 
+        get_stylesheet_uri(), 
+        array('font-awesome', 'google-fonts'), 
+        '1.1.0'
+    );
     
-    // Bootstrap JS Bundle (includes Popper)
-    wp_enqueue_script('bootstrap-bundle', get_template_directory_uri() . '/assets/js/bootstrap.bundle.min.js', array(), '5.3.0', true);
+    // Custom theme JS - Vanilla JavaScript only (NO jQuery, NO Bootstrap)
+    wp_enqueue_script(
+        'express-reparatur-script', 
+        get_template_directory_uri() . '/assets/js/main.js', 
+        array(), 
+        '1.1.0', 
+        true
+    );
     
-    // Custom theme JS
-    wp_enqueue_script('express-reparatur-script', get_template_directory_uri() . '/assets/js/main.js', array('jquery', 'bootstrap-bundle'), '1.0.0', true);
+    // Remove jQuery if not needed by other plugins
+    // Uncomment the following line if you want to completely remove jQuery
+    // wp_dequeue_script('jquery');
 }
 add_action('wp_enqueue_scripts', 'express_reparatur_scripts');
 
@@ -110,16 +132,25 @@ function express_reparatur_body_classes($classes) {
 add_filter('body_class', 'express_reparatur_body_classes');
 
 /**
- * Schema.org Markup for Local Business
- * Improves SEO for repair service business
+ * Enhanced Schema.org Markup for Local Business
+ * Comprehensive structured data for better SEO and local search visibility
  */
 function express_reparatur_schema_markup() {
     $schema = array(
         '@context' => 'https://schema.org',
         '@type' => 'LocalBusiness',
+        '@id' => 'https://expressreparatur.com/#business',
         'name' => 'Express Handy Reparatur',
-        'image' => get_template_directory_uri() . '/assets/images/logo.png',
+        'description' => 'Professionelle Smartphone und Handy Reparatur in Stuttgart. Display, Akku, Wasserschaden - Schnell, günstig, zuverlässig.',
+        'image' => array(
+            '@type' => 'ImageObject',
+            'url' => get_template_directory_uri() . '/assets/images/logo.png',
+            'width' => 300,
+            'height' => 100
+        ),
+        'logo' => get_template_directory_uri() . '/assets/images/logo.png',
         'telephone' => '+49-711-12345678',
+        'email' => 'info@expressreparatur.com',
         'address' => array(
             '@type' => 'PostalAddress',
             'streetAddress' => 'Rotebühlplatz',
@@ -130,8 +161,8 @@ function express_reparatur_schema_markup() {
         ),
         'geo' => array(
             '@type' => 'GeoCoordinates',
-            'latitude' => '48.7737905',
-            'longitude' => '9.170625'
+            'latitude' => 48.7737905,
+            'longitude' => 9.170625
         ),
         'openingHoursSpecification' => array(
             array(
@@ -148,9 +179,82 @@ function express_reparatur_schema_markup() {
             )
         ),
         'priceRange' => '€€',
-        'url' => 'https://expressreparatur.com'
+        'url' => 'https://expressreparatur.com',
+        'sameAs' => array(
+            'https://www.facebook.com/expressreparatur',
+            'https://www.instagram.com/expressreparatur'
+        ),
+        'areaServed' => array(
+            '@type' => 'City',
+            'name' => 'Stuttgart'
+        ),
+        'hasOfferCatalog' => array(
+            '@type' => 'OfferCatalog',
+            'name' => 'Reparatur Services',
+            'itemListElement' => array(
+                array(
+                    '@type' => 'Offer',
+                    'itemOffered' => array(
+                        '@type' => 'Service',
+                        'name' => 'Display Reparatur',
+                        'description' => 'Professionelle Display Reparatur für alle Smartphone-Modelle'
+                    )
+                ),
+                array(
+                    '@type' => 'Offer',
+                    'itemOffered' => array(
+                        '@type' => 'Service',
+                        'name' => 'Akku Wechsel',
+                        'description' => 'Schneller Akkutausch mit hochwertigen Ersatzteilen'
+                    )
+                ),
+                array(
+                    '@type' => 'Offer',
+                    'itemOffered' => array(
+                        '@type' => 'Service',
+                        'name' => 'Wasserschaden Reparatur',
+                        'description' => 'Professionelle Wasserschaden-Behandlung und Reparatur'
+                    )
+                )
+            )
+        ),
+        'aggregateRating' => array(
+            '@type' => 'AggregateRating',
+            'ratingValue' => '4.8',
+            'reviewCount' => '127',
+            'bestRating' => '5',
+            'worstRating' => '1'
+        )
     );
     
-    echo '<script type="application/ld+json">' . json_encode($schema) . '</script>';
+    echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
 }
 add_action('wp_head', 'express_reparatur_schema_markup');
+
+/**
+ * Add Preconnect for Performance Optimization
+ */
+function express_reparatur_resource_hints($urls, $relation_type) {
+    if ('preconnect' === $relation_type) {
+        $urls[] = array(
+            'href' => 'https://fonts.googleapis.com',
+            'crossorigin',
+        );
+        $urls[] = array(
+            'href' => 'https://fonts.gstatic.com',
+            'crossorigin',
+        );
+    }
+    return $urls;
+}
+add_filter('wp_resource_hints', 'express_reparatur_resource_hints', 10, 2);
+
+/**
+ * Add Security Headers
+ */
+function express_reparatur_security_headers() {
+    header('X-Content-Type-Options: nosniff');
+    header('X-Frame-Options: SAMEORIGIN');
+    header('X-XSS-Protection: 1; mode=block');
+}
+add_action('send_headers', 'express_reparatur_security_headers');
